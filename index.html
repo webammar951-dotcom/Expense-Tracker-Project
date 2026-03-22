@@ -6,6 +6,7 @@
   <title>Expense Tracker</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
+    
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -273,6 +274,70 @@
       .form-grid { grid-template-columns: 1fr; }
       .form-grid .full { grid-column: 1; }
     }
+    /* ── Mobile Responsive ── */
+@media (max-width: 600px) {
+
+  body {
+    padding: 20px 12px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  header h1 {
+    font-size: 24px;
+  }
+
+  .summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .card-value {
+    font-size: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid .full {
+    grid-column: 1;
+  }
+
+  .filter-bar {
+    gap: 6px;
+  }
+
+  .filter-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+
+  .expense-item {
+    padding: 12px 14px;
+  }
+
+  .expense-name {
+    font-size: 13px;
+  }
+
+  .expense-amount {
+    font-size: 14px;
+  }
+
+  .expense-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+}
+
   </style>
 </head>
 <body>
