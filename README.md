@@ -1,3 +1,16 @@
-# Expense-Tracker-Project
-It is fully made by HTML pure CSS and Js it calculates your income and expense as your expenses of some categories
-For more these helpful projects you can freely ask on Git Hub more things will coming towards 
+# 💰 Expense Tracker
+
+A full-featured expense tracker built with vanilla JavaScript.
+
+## Features
+- Add income and expenses by category
+- Real-time balance, income, expense cards
+- Filter by category or type
+- localStorage persistence
+- Delete individual or all transactions
+
+## Tech Stack
+HTML | CSS | JavaScript | localStorage
+
+## Live Demo
+[Click here](your-github-pages-link)
