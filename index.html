@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expense Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e12;
+      --surface: #16161d;
+      --border: #2a2a38;
+      --accent: #c8f04a;
+      --accent2: #f04a7a;
+      --accent3: #4af0c8;
+      --text: #f0f0f0;
+      --muted: #666;
+      --font-head: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    /* ── Header ── */
+    header {
+      max-width: 760px;
+      margin: 0 auto 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    header h1 {
+      font-family: var(--font-head);
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--text);
+    }
+    header h1 span { color: var(--accent); }
+    #currentDate {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+
+    /* ── Summary Cards ── */
+    .summary {
+      max-width: 760px;
+      margin: 0 auto 32px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .card-value {
+      font-family: var(--font-head);
+      font-size: 26px;
+      font-weight: 800;
+    }
+    #totalAmount { color: var(--text); }
+    #totalIncome { color: var(--accent); }
+    #totalExpense { color: var(--accent2); }
+
+    /* ── Form ── */
+    .form-wrap {
+      max-width: 760px;
+      margin: 0 auto 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .form-title {
+      font-family: var(--font-head);
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .form-grid .full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    input, select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus { border-color: var(--accent); }
+    select option { background: var(--bg); }
+
+    #addBtn {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 13px;
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 4px;
+    }
+    #addBtn:hover { opacity: 0.85; }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+      max-width: 760px;
+      margin: 0 auto 16px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .filter-bar span {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 1px;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: #c8f04a11;
+    }
+
+    /* ── Expense List ── */
+    .list-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .list-title {
+      font-family: var(--font-head);
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--muted);
+    }
+    #clearAllBtn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--accent2);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    #clearAllBtn:hover { background: #f04a7a22; border-color: var(--accent2); }
+
+    /* Expense Item */
+    .expense-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .expense-item:hover { border-color: #3a3a50; }
+    .expense-left { display: flex; align-items: center; gap: 14px; }
+    .expense-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      background: #1e1e2a;
+    }
+    .expense-name {
+      font-family: var(--font-head);
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .expense-meta {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .expense-right { display: flex; align-items: center; gap: 16px; }
+    .expense-amount {
+      font-family: var(--font-head);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .amount-income { color: var(--accent); }
+    .amount-expense { color: var(--accent2); }
+
+    .delete-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .delete-btn:hover { color: var(--accent2); }
+
+    /* Empty State */
+    #emptyState {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+      display: none;
+    }
+    #emptyState .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    #emptyState p { font-size: 13px; letter-spacing: 1px; }
+
+    @media (max-width: 500px) {
+      .summary { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1>Expense<span>.</span>Tracker</h1>
+    <div id="currentDate"><!-- JS: show today's date here --></div>
+  </header>
+
+  <!-- Summary Cards -->
+  <div class="summary">
+    <div class="card">
+      <div class="card-label">BALANCE</div>
+      <div class="card-value" id="totalAmount">Rs. 0</div>
+    </div>
+    <div class="card">
+      <div class="card-label">INCOME</div>
+      <div class="card-value" id="totalIncome">Rs. 0</div>
+    </div>
+    <div class="card">
+      <div class="card-label">EXPENSES</div>
+      <div class="card-value" id="totalExpense">Rs. 0</div>
+    </div>
+  </div>
+
+  <!-- Add Expense Form -->
+  <div class="form-wrap">
+    <div class="form-title">ADD TRANSACTION</div>
+    <div class="form-grid">
+
+      <div>
+        <label for="titleInput">TITLE</label>
+        <input type="text" id="titleInput" placeholder="e.g. Rent, Salary..." />
+      </div>
+
+      <div>
+        <label for="amountInput">AMOUNT (Rs.)</label>
+        <input type="number" id="amountInput" placeholder="0" />
+      </div>
+
+      <div>
+        <label for="typeInput">TYPE</label>
+        <select id="typeInput">
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="categoryInput">CATEGORY</label>
+        <select id="categoryInput">
+          <option value="food">🍔 Food</option>
+          <option value="transport">🚗 Transport</option>
+          <option value="shopping">🛍️ Shopping</option>
+          <option value="bills">💡 Bills</option>
+          <option value="salary">💼 Salary</option>
+          <option value="other">📦 Other</option>
+        </select>
+      </div>
+
+      <div class="full">
+        <button id="addBtn">+ ADD TRANSACTION</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Filter Buttons -->
+  <div class="filter-bar">
+    <span>FILTER:</span>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="income">Income</button>
+    <button class="filter-btn" data-filter="expense">Expense</button>
+    <button class="filter-btn" data-filter="food">🍔 Food</button>
+    <button class="filter-btn" data-filter="transport">🚗 Transport</button>
+    <button class="filter-btn" data-filter="shopping">🛍️ Shopping</button>
+  </div>
+
+  <!-- Expense List -->
+  <div class="list-wrap">
+    <div class="list-header">
+      <div class="list-title">TRANSACTIONS</div>
+      <button id="clearAllBtn">Clear All</button>
+    </div>
+
+    <!-- JS: render expense items here -->
+    <div id="expenseList"></div>
+
+    <!-- Show when list is empty -->
+    <div id="emptyState">
+      <div class="empty-icon">💸</div>
+      <p>No transactions yet. Add one above!</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
